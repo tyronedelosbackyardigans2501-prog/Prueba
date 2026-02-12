@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ven y únete a mi nueva página, Dale Like y Comenta</title>
+    
+    <title>Tengo una pregunta... 🙈</title>
+    <meta property="og:title" content="Tienes un mensaje pendiente... 💌">
+    <meta property="og:description" content="Ábrelo solo si estás sola. 🤫">
+    <meta property="og:image" content="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDhzdmN4c25qZzlxZ2xmbjgzcG9iZ3lvenRoM2oxbXZmOHZ4ZGd4dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UzZofSpBFPCVCNEwcq/giphy.gif">
+
     <style>
         body {
             display: flex;
@@ -16,13 +21,37 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             overflow: hidden; 
+            position: relative;
         }
+
+        /* --- TÍTULO ANIMADO (El texto entra volando) --- */
         h1 { 
             color: #d32f2f; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            z-index: 10;
+            z-index: 20; 
+            font-size: 1.8em; /* Ajustado para móviles */
+            margin: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
         }
-        .buttons { margin-top: 20px; z-index: 10; }
+
+        .titulo-parte {
+            opacity: 0;
+            display: inline-block;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-out;
+        }
+
+        /* Direcciones de entrada del texto */
+        .viene-izquierda { animation-name: entrarIzquierda; animation-delay: 0.2s; }
+        .viene-arriba { animation-name: entrarArriba; animation-delay: 0.4s; }
+        .viene-derecha { animation-name: entrarDerecha; animation-delay: 0.6s; }
+        .viene-abajo { animation-name: entrarAbajo; animation-delay: 0.8s; }
+
+        .buttons { margin-top: 20px; z-index: 20; }
         button {
             padding: 15px 30px;
             font-size: 18px;
@@ -33,13 +62,14 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         #yesBtn { background-color: #4caf50; color: white; }
-        #noBtn { background-color: #f44336; color: white; position: absolute; }
+        #noBtn { background-color: #f44336; color: white; position: absolute; z-index: 30; }
         
         .cat-img { 
             width: 200px; 
             border-radius: 15px; 
             margin-bottom: 20px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            z-index: 20;
         }
 
         /* --- ESTILOS DEL MENSAJE FINAL --- */
@@ -68,25 +98,17 @@
             display: block;
         }
 
-        /* --- ESTILOS PARA TUS STICKERS (CUYCITO Y PERRITO) --- */
+        /* --- STICKERS FLOTANTES --- */
         .sticker-flotante {
-            display: none; /* Ocultos hasta que diga SÍ */
-            position: fixed; /* Pegados a la pantalla */
-            width: 140px; /* Tamaño grandecito para que se vean bien */
-            top: 20px; /* Distancia desde el techo */
-            z-index: 100; /* Siempre encima */
+            display: none; 
+            position: fixed; 
+            width: 140px; 
+            top: 20px; 
+            z-index: 100; 
             animation: rebotar 1.5s infinite ease-in-out;
         }
-        
-        .izquierda { 
-            left: 10px; 
-            transform: rotate(-10deg); 
-        }
-        
-        .derecha { 
-            right: 10px; 
-            transform: rotate(10deg); 
-        }
+        .izquierda { left: 10px; transform: rotate(-10deg); }
+        .derecha { right: 10px; transform: rotate(10deg); }
 
         #btnMusica {
             background-color: #d32f2f;
@@ -94,25 +116,46 @@
             margin-top: 20px;
             font-weight: bold;
         }
-        
-        /* Animaciones */
-        @keyframes aparecer {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
 
-        @keyframes rebotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); } /* Flotan arriba y abajo */
+        /* --- CORAZONES DE FONDO --- */
+        .corazon-fondo {
+            position: fixed;
+            bottom: -10vh;
+            font-size: 1.5rem;
+            color: rgba(255, 105, 180, 0.6);
+            z-index: 1;
+            animation: flotarArriba linear infinite;
+        }
+        
+        /* --- ANIMACIONES --- */
+        @keyframes aparecer { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes rebotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        
+        @keyframes entrarIzquierda { from { opacity: 0; transform: translateX(-100px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes entrarArriba { from { opacity: 0; transform: translateY(-100px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes entrarDerecha { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes entrarAbajo { from { opacity: 0; transform: translateY(100px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes flotarArriba {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
+    <div id="contenedorCorazones"></div>
+
     <div id="preguntaContainer">
         <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDhzdmN4c25qZzlxZ2xmbjgzcG9iZ3lvenRoM2oxbXZmOHZ4ZGd4dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UzZofSpBFPCVCNEwcq/giphy.gif" alt="Gatito con rosa" class="cat-img">
         
-        <h1>¿Quieres ser mi San Dorothyn, Dodothy? ❤️</h1>
+        <h1>
+            <span class="titulo-parte viene-izquierda">¿Quieres</span>
+            <span class="titulo-parte viene-arriba">ser mi</span>
+            <span class="titulo-parte viene-derecha">San Dorothyn,</span>
+            <span class="titulo-parte viene-abajo">Dodothy? ❤️</span>
+        </h1>
 
         <div class="buttons">
             <button id="yesBtn">¡Chi! 😍</button>
@@ -138,10 +181,26 @@
         const noBtn = document.getElementById('noBtn');
         const preguntaContainer = document.getElementById('preguntaContainer');
         const mensajeFinal = document.getElementById('mensajeFinal');
-        
-        // Referencias a tus stickers
         const elCuy = document.getElementById('cuycito');
         const elPerro = document.getElementById('perrito');
+
+        // --- CREAR LLUVIA DE CORAZONES ---
+        function crearCorazonesFondo() {
+            const contenedor = document.getElementById('contenedorCorazones');
+            const numeroCorazones = 30; 
+
+            for (let i = 0; i < numeroCorazones; i++) {
+                const corazon = document.createElement('div');
+                corazon.classList.add('corazon-fondo');
+                corazon.innerHTML = '❤️'; 
+                corazon.style.left = Math.random() * 100 + 'vw';
+                corazon.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
+                corazon.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                corazon.style.animationDelay = Math.random() * 5 + 's';
+                contenedor.appendChild(corazon);
+            }
+        }
+        crearCorazonesFondo(); // Activar lluvia
 
         // El botón "No" se escapa
         noBtn.addEventListener('mouseover', () => {
@@ -153,13 +212,8 @@
 
         // Cuando dice que SÍ
         yesBtn.addEventListener('click', () => {
-            // 1. Ocultar la pregunta
             preguntaContainer.style.display = 'none';
-            
-            // 2. Mostrar mensaje final
             mensajeFinal.style.display = 'block';
-            
-            // 3. ¡SOLTAR AL CUY Y AL PERRO!
             elCuy.style.display = 'block';
             elPerro.style.display = 'block';
         });
@@ -170,7 +224,3 @@
     </script>
 </body>
 </html>
-
-
-
-
