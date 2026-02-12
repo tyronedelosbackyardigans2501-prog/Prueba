@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi flaquita ❤️</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #ffebee;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        h1 { color: #d32f2f; }
+        .buttons { margin-top: 20px; }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        #yesBtn { background-color: #4caf50; color: white; }
+        #noBtn { background-color: #f44336; color: white; position: absolute; }
+        .cat-img { width: 200px; border-radius: 50%; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJpYmZ0cmZ6YXN6eXN6eXN6eXN6eXN6eXN6eXN6eXN6eXN6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Gatito" class="cat-img">
+    
+    <h1>¿Quieres ser mi San Valentín, flaquita? ❤️</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">¡SÍ! 😍</button>
+        <button id="noBtn">No 😢</button>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+
+        // El botón "No" se mueve cuando intentas tocarlo
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        });
+
+        // Lo que pasa cuando por fin dice que SÍ
+        yesBtn.addEventListener('click', () => {
+            alert('¡SABÍA QUE DIRÍAS QUE SÍ! Te quiero mucho, mi Dodothy. ❤️');
+            window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // O pon una canción que les guste
+        });
+    </script>
+</body>
+</html>
