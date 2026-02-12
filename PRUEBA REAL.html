@@ -11,6 +11,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            /* Fondo degradado romántico */
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -19,8 +20,9 @@
         h1 { 
             color: #d32f2f; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            z-index: 10;
         }
-        .buttons { margin-top: 20px; }
+        .buttons { margin-top: 20px; z-index: 10; }
         button {
             padding: 15px 30px;
             font-size: 18px;
@@ -40,6 +42,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
         }
 
+        /* --- ESTILOS DEL MENSAJE FINAL --- */
         #mensajeFinal {
             display: none; 
             background-color: rgba(255, 255, 255, 0.95);
@@ -50,7 +53,7 @@
             border: 3px solid #d32f2f;
             animation: aparecer 0.5s ease-out;
             position: relative;
-            z-index: 10;
+            z-index: 50; /* Encima de todo */
         }
         #mensajeFinal h2 {
             color: #d32f2f;
@@ -65,17 +68,25 @@
             display: block;
         }
 
-        /* --- AQUÍ LA MAGIA DE LOS STICKERS --- */
+        /* --- ESTILOS PARA TUS STICKERS (CUYCITO Y PERRITO) --- */
         .sticker-flotante {
-            display: none; /* Ocultos al principio */
-            position: fixed; /* Se pegan a la pantalla */
-            width: 130px; /* Tamaño del sticker */
-            top: 30px; /* Distancia desde el techo */
-            z-index: 20; /* Encima de todo */
-            animation: rebotar 2s infinite ease-in-out;
+            display: none; /* Ocultos hasta que diga SÍ */
+            position: fixed; /* Pegados a la pantalla */
+            width: 140px; /* Tamaño grandecito para que se vean bien */
+            top: 20px; /* Distancia desde el techo */
+            z-index: 100; /* Siempre encima */
+            animation: rebotar 1.5s infinite ease-in-out;
         }
-        .izquierda { left: 20px; transform: rotate(-15deg); }
-        .derecha { right: 20px; transform: rotate(15deg); }
+        
+        .izquierda { 
+            left: 10px; 
+            transform: rotate(-10deg); 
+        }
+        
+        .derecha { 
+            right: 10px; 
+            transform: rotate(10deg); 
+        }
 
         #btnMusica {
             background-color: #d32f2f;
@@ -84,6 +95,7 @@
             font-weight: bold;
         }
         
+        /* Animaciones */
         @keyframes aparecer {
             from { transform: scale(0.5); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
@@ -91,7 +103,7 @@
 
         @keyframes rebotar {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-15px); } /* Flotan arriba y abajo */
         }
     </style>
 </head>
@@ -108,8 +120,8 @@
         </div>
     </div>
 
-    <img src="Cuycito.webp" id="stickerIzquierda" class="sticker-flotante izquierda" alt="Cuycito">
-    <img src="Perrito.webp" id="stickerDerecha" class="sticker-flotante derecha" alt="Perrito">
+    <img src="Cuycito.webp" id="cuycito" class="sticker-flotante izquierda" alt="Cuycito">
+    <img src="Perrito.webp" id="perrito" class="sticker-flotante derecha" alt="Perrito">
 
     <div id="mensajeFinal">
         <h2>¡Jum chi ajá, no le pudiste dar al NO ño?! mayo,</h2>
@@ -126,8 +138,10 @@
         const noBtn = document.getElementById('noBtn');
         const preguntaContainer = document.getElementById('preguntaContainer');
         const mensajeFinal = document.getElementById('mensajeFinal');
-        const cuy = document.getElementById('stickerIzquierda');
-        const perro = document.getElementById('stickerDerecha');
+        
+        // Referencias a tus stickers
+        const elCuy = document.getElementById('cuycito');
+        const elPerro = document.getElementById('perrito');
 
         // El botón "No" se escapa
         noBtn.addEventListener('mouseover', () => {
@@ -137,17 +151,17 @@
             noBtn.style.top = `${y}px`;
         });
 
-        // Al decir que SÍ
+        // Cuando dice que SÍ
         yesBtn.addEventListener('click', () => {
-            // 1. Ocultamos la pregunta
+            // 1. Ocultar la pregunta
             preguntaContainer.style.display = 'none';
             
-            // 2. Mostramos el mensaje final
+            // 2. Mostrar mensaje final
             mensajeFinal.style.display = 'block';
             
-            // 3. ¡SOLTAMOS A LOS ANIMALITOS!
-            cuy.style.display = 'block';
-            perro.style.display = 'block';
+            // 3. ¡SOLTAR AL CUY Y AL PERRO!
+            elCuy.style.display = 'block';
+            elPerro.style.display = 'block';
         });
 
         function irALaCancion() {
@@ -155,6 +169,5 @@
         }
     </script>
 </body>
-</html>
 </html>
 
