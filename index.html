@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-     <title>The game started, responde ahora el juego comienza </title>
+    <title>.</title>
+
     <meta property="og:title" content="Tienes un mensaje pendiente... ¿Qué harás?">
     <meta property="og:description" content="Ábrelo solo si estás sola. 🤫">
     <meta property="og:image" content="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGtieG8wOW41azFqNWxoZGZxZ2tjdnoycjN6YnAxbmdydW1laGFvcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/51Uiuy5QBZNkoF3b2Z/giphy.gif">
-    
+
     <style>
+        /* ESTILOS GENERALES: Fondo y alineación */
         body {
             display: flex;
             flex-direction: column;
@@ -24,6 +25,7 @@
             margin: 0;
         }
 
+        /* PANTALLA NEGRA INICIAL: Cubre todo por 6 segundos */
         #introContainer {
             display: flex;
             flex-direction: column;
@@ -38,42 +40,60 @@
             z-index: 1000;
         }
 
-        h1 { 
-            color: #d32f2f; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            z-index: 20; 
-            font-size: 1.8em;
-            margin: 20px;
-            line-height: 1.4;
-            width: 90%; /* Para que no se pegue a los bordes */
-        }
-        
-        .linea-titulo {
-            display: block;
+        /* CONTENEDOR DE LA PREGUNTA: Organizado en vertical (Imagen arriba) */
+        #preguntaContainer {
+            display: none; /* Empieza oculto hasta que pase la intro */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
             width: 100%;
         }
 
+        /* LA IMAGEN DEL GATITO (ARRIBA) */
+        .cat-img { 
+            width: 180px; 
+            border-radius: 15px; 
+            margin-bottom: 10px; 
+            z-index: 20;
+        }
+
+        /* EL TÍTULO (AL MEDIO) */
+        h1 { 
+            color: #d32f2f; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            font-size: 1.6em;
+            margin: 10px 0;
+            line-height: 1.4;
+            width: 90%;
+        }
+
+        /* Animación de las letras entrando */
+        .linea-titulo { display: block; width: 100%; }
         .titulo-parte {
             opacity: 0;
             display: inline-block;
-            animation-duration: 1s;
-            animation-fill-mode: forwards;
-            animation-timing-function: ease-out;
+            animation: entrar 1s forwards ease-out;
             margin: 0 2px;
         }
+        .v-izq { animation-name: e-izq; animation-delay: 0.2s; }
+        .v-arr { animation-name: e-arr; animation-delay: 0.4s; }
+        .v-der { animation-name: e-der; animation-delay: 0.6s; }
+        .v-aba { animation-name: e-aba; animation-delay: 0.8s; }
 
-        /* Animaciones suaves que no rompen el diseño en móvil */
-        .viene-izquierda { animation-name: entrarIzquierda; animation-delay: 0.2s; }
-        .viene-arriba { animation-name: entrarArriba; animation-delay: 0.4s; }
-        .viene-derecha { animation-name: entrarDerecha; animation-delay: 0.6s; }
-        .viene-abajo { animation-name: entrarAbajo; animation-delay: 0.8s; }
+        /* LOS BOTONES (ABAJO) */
+        .buttons { 
+            margin-top: 15px; 
+            z-index: 20; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 10px; 
+            width: 100%; 
+            position: relative; 
+            height: 120px; /* Espacio para que el botón NO pueda moverse */
+        }
 
-        @keyframes entrarIzquierda { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes entrarArriba { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes entrarDerecha { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes entrarAbajo { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .buttons { margin-top: 20px; z-index: 20; }
         button {
             padding: 15px 30px;
             font-size: 18px;
@@ -83,16 +103,10 @@
             transition: 0.3s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        #yesBtn { background-color: #4caf50; color: white; }
+        #yesBtn { background-color: #4caf50; color: white; position: relative; z-index: 25; }
         #noBtn { background-color: #f44336; color: white; position: absolute; z-index: 30; }
-        
-        .cat-img { 
-            width: 200px; 
-            border-radius: 15px; 
-            margin-bottom: 20px; 
-            z-index: 20;
-        }
 
+        /* MENSAJE CUANDO DICE QUE SÍ */
         #mensajeFinal {
             display: none; 
             background-color: rgba(255, 255, 255, 0.95);
@@ -105,9 +119,8 @@
             position: relative;
             z-index: 50;
         }
-        #mensajeFinal h2 { color: #d32f2f; font-size: 1.8em; margin-bottom: 10px; }
-        .gif-final { width: 150px; border-radius: 10px; margin: 10px auto; display: block; }
 
+        /* STICKERS QUE APARECEN AL FINAL */
         .sticker-flotante {
             display: none; 
             position: fixed; 
@@ -119,24 +132,24 @@
         .izquierda { left: 10px; }
         .derecha { right: 10px; }
 
-        #btnMusica { background-color: #d32f2f; color: white; margin-top: 20px; font-weight: bold; width: 100%; }
-
+        /* CORAZONES FLOTANDO AL FONDO */
         .corazon-fondo {
             position: fixed;
             bottom: -10vh;
             font-size: 1.5rem;
             color: rgba(255, 105, 180, 0.6);
             z-index: 1;
-            animation: flotarArriba linear infinite;
+            animation: flotar linear infinite;
         }
-        
+
+        /* DEFINICIÓN DE ANIMACIONES */
         @keyframes aparecer { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes rebotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes flotarArriba {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-        }
+        @keyframes e-izq { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes e-arr { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes e-der { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes e-aba { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes flotar { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 20% { opacity: 0.8; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -147,17 +160,17 @@
         <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTRid24xYjI5Nmd6cWtrOXIzeDA3c3I2aGRoZ2Y5M2kydDN1cGZtaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/I8z7CGrLDLpbq/giphy.gif" style="max-width: 90%; max-height: 80vh; border-radius: 15px;">
     </div>
 
-    <div id="preguntaContainer" style="display: none;">
+    <div id="preguntaContainer">
         <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDhzdmN4c25qZzlxZ2xmbjgzcG9iZ3lvenRoM2oxbXZmOHZ4ZGd4dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UzZofSpBFPCVCNEwcq/giphy.gif" alt="Gatito" class="cat-img">
         
         <h1>
             <span class="linea-titulo">
-                <span class="titulo-parte viene-izquierda">¿Quieres</span>
-                <span class="titulo-parte viene-arriba">ser mi</span>
-                <span class="titulo-parte viene-derecha">San Dorothyn,</span>
+                <span class="titulo-parte v-izq">¿Quieres</span>
+                <span class="titulo-parte v-arr">ser mi</span>
+                <span class="titulo-parte v-der">San Dorothyn,</span>
             </span>
             <span class="linea-titulo">
-                <span class="titulo-parte viene-abajo" style="font-size: 1.1em; font-weight: bold;">Dodothy? ❤️</span>
+                <span class="titulo-parte v-aba" style="font-size: 1.1em; font-weight: bold;">Dodothy? ❤️</span>
             </span>
         </h1>
 
@@ -178,15 +191,37 @@
     </div>
 
     <script>
-        const yesBtn = document.getElementById('yesBtn'), noBtn = document.getElementById('noBtn'), pc = document.getElementById('preguntaContainer'), mf = document.getElementById('mensajeFinal'), c = document.getElementById('cuycito'), p = document.getElementById('perrito');
+        // Declaración de variables para controlar los elementos
+        const yesBtn = document.getElementById('yesBtn'), 
+              noBtn = document.getElementById('noBtn'), 
+              pc = document.getElementById('preguntaContainer'), 
+              mf = document.getElementById('mensajeFinal'), 
+              c = document.getElementById('cuycito'), 
+              p = document.getElementById('perrito');
 
+        // TEMPORIZADOR: Quita la pantalla negra después de 6 segundos
         setTimeout(() => {
             document.getElementById('introContainer').style.display = 'none';
             pc.style.display = 'flex';
         }, 6000);
 
-        function f(){const container=document.getElementById('contenedorCorazones');for(let i=0;i<25;i++){const h=document.createElement('div');h.className='corazon-fondo';h.innerHTML='❤️';h.style.left=Math.random()*100+'vw';h.style.fontSize=(Math.random()*1+0.5)+'rem';h.style.animationDuration=(Math.random()*4+4)+'s';h.style.animationDelay=Math.random()*5+'s';container.appendChild(h)}}f();
+        // FUNCIÓN CORAZONES: Crea la lluvia de corazones al azar
+        function f(){
+            const container=document.getElementById('contenedorCorazones');
+            for(let i=0;i<25;i++){
+                const h=document.createElement('div');
+                h.className='corazon-fondo';
+                h.innerHTML='❤️';
+                h.style.left=Math.random()*100+'vw';
+                h.style.fontSize=(Math.random()*1+0.5)+'rem';
+                h.style.animationDuration=(Math.random()*4+4)+'s';
+                h.style.animationDelay=Math.random()*5+'s';
+                container.appendChild(h);
+            }
+        }
+        f(); // Inicia la lluvia de corazones
 
+        // LÓGICA BOTÓN NO: Salta a una posición aleatoria cuando pasas el mouse
         noBtn.addEventListener('mouseover', () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -194,6 +229,7 @@
             noBtn.style.top = y + 'px';
         });
 
+        // LÓGICA BOTÓN SÍ: Oculta la pregunta y muestra el mensaje final con los stickers
         yesBtn.addEventListener('click', () => {
             pc.style.display = 'none';
             mf.style.display = 'block';
@@ -201,9 +237,10 @@
             p.style.display = 'block';
         });
 
-        function irALaCancion() { window.location.href = "https://www.youtube.com/watch?v=W_vyVjE_HN8&list=RDW_vyVjE_HN8"; }
+        // FUNCIÓN MÚSICA: Te manda al video de YouTube
+        function irALaCancion() { 
+            window.location.href = "https://www.youtube.com/watch?v=W_vyVjE_HN8&list=RDW_vyVjE_HN8"; 
+        }
     </script>
 </body>
 </html>
-
-
