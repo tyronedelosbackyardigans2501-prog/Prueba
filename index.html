@@ -15,8 +15,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            /* Fondo degradado romántico */
+            min-height: 100vh;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -24,17 +23,19 @@
             position: relative;
         }
 
-        /* --- TÍTULO ANIMADO (El texto entra volando) --- */
+        /* --- TÍTULO ANIMADO (CORREGIDO) --- */
         h1 { 
             color: #d32f2f; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             z-index: 20; 
-            font-size: 1.8em; /* Ajustado para móviles */
+            font-size: 1.8em;
             margin: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
+            line-height: 1.3; /* Espacio entre las dos líneas */
+        }
+        
+        /* Clase para forzar las dos líneas */
+        .linea-titulo {
+            display: block;
         }
 
         .titulo-parte {
@@ -43,9 +44,10 @@
             animation-duration: 1s;
             animation-fill-mode: forwards;
             animation-timing-function: ease-out;
+            margin: 0 3px; /* Espacio pequeñito entre palabras */
         }
 
-        /* Direcciones de entrada del texto */
+        /* Direcciones de entrada */
         .viene-izquierda { animation-name: entrarIzquierda; animation-delay: 0.2s; }
         .viene-arriba { animation-name: entrarArriba; animation-delay: 0.4s; }
         .viene-derecha { animation-name: entrarDerecha; animation-delay: 0.6s; }
@@ -72,7 +74,7 @@
             z-index: 20;
         }
 
-        /* --- ESTILOS DEL MENSAJE FINAL --- */
+        /* --- MENSAJE FINAL --- */
         #mensajeFinal {
             display: none; 
             background-color: rgba(255, 255, 255, 0.95);
@@ -83,7 +85,7 @@
             border: 3px solid #d32f2f;
             animation: aparecer 0.5s ease-out;
             position: relative;
-            z-index: 50; /* Encima de todo */
+            z-index: 50;
         }
         #mensajeFinal h2 {
             color: #d32f2f;
@@ -98,7 +100,7 @@
             display: block;
         }
 
-        /* --- STICKERS FLOTANTES --- */
+        /* --- STICKERS --- */
         .sticker-flotante {
             display: none; 
             position: fixed; 
@@ -117,7 +119,7 @@
             font-weight: bold;
         }
 
-        /* --- CORAZONES DE FONDO --- */
+        /* --- CORAZONES FONDO --- */
         .corazon-fondo {
             position: fixed;
             bottom: -10vh;
@@ -151,10 +153,14 @@
         <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDhzdmN4c25qZzlxZ2xmbjgzcG9iZ3lvenRoM2oxbXZmOHZ4ZGd4dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UzZofSpBFPCVCNEwcq/giphy.gif" alt="Gatito con rosa" class="cat-img">
         
         <h1>
-            <span class="titulo-parte viene-izquierda">¿Quieres</span>
-            <span class="titulo-parte viene-arriba">ser mi</span>
-            <span class="titulo-parte viene-derecha">San Dorothyn,</span>
-            <span class="titulo-parte viene-abajo">Dodothy? ❤️</span>
+            <span class="linea-titulo">
+                <span class="titulo-parte viene-izquierda">¿Quieres</span>
+                <span class="titulo-parte viene-arriba">ser mi</span>
+                <span class="titulo-parte viene-derecha">San Dorothyn,</span>
+            </span>
+            <span class="linea-titulo">
+                <span class="titulo-parte viene-abajo" style="font-size: 1.1em; font-weight: bold;">Dodothy? ❤️</span>
+            </span>
         </h1>
 
         <div class="buttons">
@@ -184,11 +190,9 @@
         const elCuy = document.getElementById('cuycito');
         const elPerro = document.getElementById('perrito');
 
-        // --- CREAR LLUVIA DE CORAZONES ---
         function crearCorazonesFondo() {
             const contenedor = document.getElementById('contenedorCorazones');
             const numeroCorazones = 30; 
-
             for (let i = 0; i < numeroCorazones; i++) {
                 const corazon = document.createElement('div');
                 corazon.classList.add('corazon-fondo');
@@ -200,9 +204,8 @@
                 contenedor.appendChild(corazon);
             }
         }
-        crearCorazonesFondo(); // Activar lluvia
+        crearCorazonesFondo();
 
-        // El botón "No" se escapa
         noBtn.addEventListener('mouseover', () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -210,7 +213,6 @@
             noBtn.style.top = `${y}px`;
         });
 
-        // Cuando dice que SÍ
         yesBtn.addEventListener('click', () => {
             preguntaContainer.style.display = 'none';
             mensajeFinal.style.display = 'block';
