@@ -11,7 +11,6 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            /* CAMBIO 1: UN FONDO DEGRADADO MUCHO MÁS BONITO */
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -19,7 +18,7 @@
         }
         h1 { 
             color: #d32f2f; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Sombra suave al texto */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         .buttons { margin-top: 20px; }
         button {
@@ -29,30 +28,29 @@
             border: none;
             border-radius: 10px;
             transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombrita a los botones */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         #yesBtn { background-color: #4caf50; color: white; }
         #noBtn { background-color: #f44336; color: white; position: absolute; }
         
-        /* CAMBIO 2: QUITAMOS EL 50% PARA QUE NO SEA UN CÍRCULO */
         .cat-img { 
             width: 200px; 
-            border-radius: 15px; /* Solo bordes redondeados */
+            border-radius: 15px; 
             margin-bottom: 20px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Sombrita a la imagen */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
         }
 
         #mensajeFinal {
             display: none; 
-            background-color: rgba(255, 255, 255, 0.9); /* Un poco transparente */
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             max-width: 80%;
             border: 3px solid #d32f2f;
             animation: aparecer 0.5s ease-out;
-            align-items: center;
-            flex-direction: column;
+            position: relative;
+            z-index: 10;
         }
         #mensajeFinal h2 {
             color: #d32f2f;
@@ -60,13 +58,24 @@
             margin-bottom: 10px;
         }
         
-        /* ESTILO PARA EL SEGUNDO GIF (EL DEL FINAL) */
         .gif-final {
             width: 150px;
             border-radius: 10px;
             margin: 10px auto;
             display: block;
         }
+
+        /* --- AQUÍ LA MAGIA DE LOS STICKERS --- */
+        .sticker-flotante {
+            display: none; /* Ocultos al principio */
+            position: fixed; /* Se pegan a la pantalla */
+            width: 130px; /* Tamaño del sticker */
+            top: 30px; /* Distancia desde el techo */
+            z-index: 20; /* Encima de todo */
+            animation: rebotar 2s infinite ease-in-out;
+        }
+        .izquierda { left: 20px; transform: rotate(-15deg); }
+        .derecha { right: 20px; transform: rotate(15deg); }
 
         #btnMusica {
             background-color: #d32f2f;
@@ -79,9 +88,15 @@
             from { transform: scale(0.5); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
+
+        @keyframes rebotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
     </style>
 </head>
 <body>
+
     <div id="preguntaContainer">
         <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDhzdmN4c25qZzlxZ2xmbjgzcG9iZ3lvenRoM2oxbXZmOHZ4ZGd4dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UzZofSpBFPCVCNEwcq/giphy.gif" alt="Gatito con rosa" class="cat-img">
         
@@ -93,10 +108,13 @@
         </div>
     </div>
 
+    <img src="Cuycito.webp" id="stickerIzquierda" class="sticker-flotante izquierda" alt="Cuycito">
+    <img src="Perrito.webp" id="stickerDerecha" class="sticker-flotante derecha" alt="Perrito">
+
     <div id="mensajeFinal">
         <h2>¡Jum chi ajá, no le pudiste dar al NO ño?! mayo,</h2>
         
-        <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ29vcWx4aTM2YWl1aXNneGR1eGQ1YzBzZTQwNjNwZGhqajhmY2pmayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/n7PjZc4B0DJHMfISNk/giphy.gif" class="gif-final" alt="Celebración">
+        <img src="https://media.giphy.com/media/T86i6yDyOYz7y/giphy.gif" class="gif-final" alt="Celebración">
         
         <p style="font-size: 1.2em; color: #555;">Te quiero mucho, mi Dodothy. ❤️</p>
         
@@ -108,8 +126,10 @@
         const noBtn = document.getElementById('noBtn');
         const preguntaContainer = document.getElementById('preguntaContainer');
         const mensajeFinal = document.getElementById('mensajeFinal');
+        const cuy = document.getElementById('stickerIzquierda');
+        const perro = document.getElementById('stickerDerecha');
 
-        // El botón "No" se mueve
+        // El botón "No" se escapa
         noBtn.addEventListener('mouseover', () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -119,8 +139,15 @@
 
         // Al decir que SÍ
         yesBtn.addEventListener('click', () => {
+            // 1. Ocultamos la pregunta
             preguntaContainer.style.display = 'none';
+            
+            // 2. Mostramos el mensaje final
             mensajeFinal.style.display = 'block';
+            
+            // 3. ¡SOLTAMOS A LOS ANIMALITOS!
+            cuy.style.display = 'block';
+            perro.style.display = 'block';
         });
 
         function irALaCancion() {
@@ -129,3 +156,5 @@
     </script>
 </body>
 </html>
+</html>
+
